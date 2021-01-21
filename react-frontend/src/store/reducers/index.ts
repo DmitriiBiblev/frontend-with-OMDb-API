@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import * as movies from './movies/movies.reducer';
+import * as movies from './movies.reducer';
 
 export interface IRootState {
   movies: movies.IState

@@ -1,4 +1,5 @@
 import { Action } from 'redux';
+import { IGetMoviesData } from '../../interfaces/get-movies-data.interface';
 
 export enum MoviesActionTypes {
   getMovies = '[Movies] Get Movies',
@@ -12,6 +13,9 @@ export class GetMovies implements Action {
 
 export class GetMoviesSuccess implements Action {
   readonly type = MoviesActionTypes.getMoviesSuccess;
+
+  constructor(public payload: IGetMoviesData) {
+  }
 }
 
 export class GetMoviesFailed implements Action {

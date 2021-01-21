@@ -1,39 +1,56 @@
 import React from 'react';
-import { getMovies } from '../../services/movies.service';
 import { Pagination } from '@material-ui/lab';
+import { IRootState } from '../../store/reducers';
+import { Dispatch } from 'redux';
+import { GetMovies, MoviesActions } from '../../store/actions/movies.actions';
+import { connect } from 'react-redux';
+import { movies, pageCount } from '../../store/selectors/movies.selectors';
+import { IMovieCard } from '../../interfaces/movie-card.interface';
 
 interface IProps {
+  movies: IMovieCard[]
+  pageCount: number
 
+  getMovies(): void
 }
 
 interface IState {
-  movies: any[]
+  currentPage: number
 }
 
 class Home extends React.Component<IProps, IState> {
+
   constructor(props: IProps) {
     super(props);
 
     this.state = {
-      movies: [],
+      currentPage: 1,
     };
   }
 
   componentDidMount(): void {
-    getMovies().then((movies: any[]) => this.setState({ movies }));
+    this.props.getMovies();
   }
 
   render(): React.ReactElement {
-    console.log(this.state?.movies);
+    const { pageCount } = this.props;
 
     return (
       <div>
         Home
-        <Pagination count={10} color="primary"/>
-
+        <Pagination count={pageCount} color="primary"/>
       </div>
     );
   }
 }
 
-export default Home;
+const mapStateToProps = (state: IRootState) => ({
+  movies: movies(state),
+  pageCount: pageCount(state),
+});
+
+const mapDispatchToProps = (dispatch: Dispatch<MoviesActions>) => ({
+  getMovies: () => dispatch(new GetMovies()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
